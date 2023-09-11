@@ -6,7 +6,6 @@ Created on Wed Jun 21 16:36:17 2023
 @author: shun-yokoyama
 """
 import os
-import re
 import glob
 from natsort import natsorted
 
@@ -56,7 +55,6 @@ def change_file_name(folder_path, old_name, new_name):
             new_file_name = folder_path + '/' + new_name + format(num, 'd') + '.jpg'
             os.rename(old_file_name, new_file_name)
                     
-            
     return 'complete'
 
 ##############################以下で条件を指定################################
