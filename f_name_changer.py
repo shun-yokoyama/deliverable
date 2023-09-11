@@ -6,14 +6,13 @@ Created on Wed Jun 21 16:36:17 2023
 @author: shun-yokoyama
 """
 import os
-import re
 import glob
-
+from natsort import natsorted
 
 def change_folder_name(folder_path, new_name):
     
     folder_and_file = os.listdir(folder_path)
-    sorted_list = sorted(folder_and_file, key=lambda x: int(re.search(r'\d+', x).group()))
+    sorted_list = natsorted(folder_and_file)
     
     for num, path in enumerate(sorted_list):
         
@@ -31,20 +30,18 @@ def change_folder_name(folder_path, new_name):
 def change_file_name(folder_path, old_name, new_name):
     
     folder_and_file = os.listdir(folder_path)
-    sorted_list = sorted(folder_and_file, key=lambda x: int(re.search(r'\d+', x).group()))
-    print(sorted_list)
-
+    sorted_list = natsorted(folder_and_file)
     
     for num, sorted_name in enumerate(sorted_list):
         
         folder_or_file = os.path.join(folder_path, sorted_name)
         
         #フォルダ>フォルダ>ファイルの順で構成されている場合
-        if print(os.path.isdir(folder_or_file)):
+        if os.path.isdir(folder_or_file):
         
             old_folder_name = folder_or_file
             old_file_name = glob.glob(old_folder_name + '/' + old_name)
-            new_file_name = old_folder_name + '/' + new_name + format(num, 'd') + '.bmp'
+            new_file_name = old_folder_name + '/' + new_name + format(num, 'd') + '.jpg'
             
             for old in old_file_name:
                 if os.path.isfile(old):
@@ -55,22 +52,21 @@ def change_file_name(folder_path, old_name, new_name):
         elif os.path.isfile(folder_or_file):
             
             old_file_name = folder_or_file
-            new_file_name = folder_path + '/' + new_name + format(num, 'd') + '.bmp'
+            new_file_name = folder_path + '/' + new_name + format(num, 'd') + '.jpg'
             os.rename(old_file_name, new_file_name)
                     
-            
     return 'complete'
 
 ##############################以下で条件を指定################################
-folder_path = '名前を変更したいフォルダのパスを指定'
-file_path = '名前を変更したいファイルのパスを指定'
-#現在のファイル名の型
-#(例) image1.png~image100.png --> image*.png
-old_file_name = '現在のファイル名'
+#フォルダ名を変更する際に指定する
+folder_path = "フォルダのパスを指定する"
+new_folder_name = '新たなフォルダのkeyを指定する'
 
-print(change_folder_name(folder_path, new_name = 'folder'))
-print(change_file_name(file_path, old_name = old_file_name, new_name = 'file'))
-#############################################################################
-#上記の例でフォルダ100個に対して実行するとフォルダ名はfolder0~folder99
-#100個のファイルに対して実行するとファイル名はfile0~file99となる．
-##############################################################################
+print(change_folder_name(folder_path, new_name = new_folder_name))
+
+#ファイル名を変更する際に指定する
+file_path = "ファイルのパスを指定する"
+old_file_name = '*.jpg'
+new_file_name = '新たなkeyを指定する'
+
+print(change_file_name(file_path, old_name = old_file_name, new_name = new_file_name))
