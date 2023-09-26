@@ -29,6 +29,13 @@ def change_folder_name(folder_path, new_name):
         
 def change_file_name(folder_path, old_name, new_name):
     
+    name_split = old_name.split('.')
+    if len(name_split) > 1:
+        #拡張子取得
+        extension = name_split[-1]
+    else:
+        raise Exception("拡張子まで含めたファイル名を指定してください．")
+        
     folder_and_file = os.listdir(folder_path)
     sorted_list = natsorted(folder_and_file)
     
@@ -41,7 +48,7 @@ def change_file_name(folder_path, old_name, new_name):
         
             old_folder_name = folder_or_file
             old_file_name = glob.glob(old_folder_name + '/' + old_name)
-            new_file_name = old_folder_name + '/' + new_name + format(num, 'd') + '.jpg'
+            new_file_name = old_folder_name + '/' + new_name + format(num, 'd') + str('.') + extension
             
             for old in old_file_name:
                 if os.path.isfile(old):
@@ -52,7 +59,7 @@ def change_file_name(folder_path, old_name, new_name):
         elif os.path.isfile(folder_or_file):
             
             old_file_name = folder_or_file
-            new_file_name = folder_path + '/' + new_name + format(num, 'd') + '.jpg'
+            new_file_name = folder_path + '/' + new_name + format(num, 'd') + str('.') + extension
             os.rename(old_file_name, new_file_name)
                     
     return 'complete'
